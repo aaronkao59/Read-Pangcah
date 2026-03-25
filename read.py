@@ -129,6 +129,31 @@ def speak(text):
         return fp
     except: return None
 
+def get_audio_source(text, type="word", index=0, article_name=""):
+    # 1. 將文章名稱轉換為安全的資料夾路徑 (移除空格與特殊符號)
+    safe_folder = article_name.replace(" ", "_").replace("’", "").replace("'", "")
+    
+    # 2. 設定檢查路徑
+    if type == "word":
+        # 檔名範例：audio/Dadaya_no_niyaro/words/tanikay.mp3
+        local_path = f"audio/{safe_folder}/words/{text}.mp3"
+    else:
+        # 檔名範例：audio/Dadaya_no_niyaro/sentences/s0.mp3
+        local_path = f"audio/{safe_folder}/sentences/s{index}.mp3"
+
+    # 3. 檢查檔案是否存在
+    if os.path.exists(local_path):
+        return local_path  # 優先回傳自錄音檔路徑
+    
+    # 4. 備援方案：如果沒錄音，則使用 AI 發音 (gTTS)
+    try:
+        tts = gTTS(text=text, lang='it')
+        fp = io.BytesIO()
+        tts.write_to_fp(fp)
+        return fp
+    except:
+        return None
+
 # --- 5. 側邊欄文章選擇 ---
 st.sidebar.title("📚 文章選讀")
 selected_title = st.sidebar.selectbox("請選擇練習文章：", list(ARTICLES.keys()))
