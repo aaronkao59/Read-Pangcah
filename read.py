@@ -134,9 +134,9 @@ current_data = ARTICLES[selected_title]
 word_list = st.session_state.dynamic_vocab
 
 # --- 6. App 主頁面 ---
-st.markdown('<h1 style="font-size: 40px; text-align: center;">菁英朗讀訓練機</h1>', unsafe_allow_html=True) # App 內顯主標題
+st.markdown('<h1 style="font-size: 37px; text-align: center;">菁英朗讀訓練機</h1>', unsafe_allow_html=True) # App 內顯主標題
 
-tabs = st.tabs(["🎴 生詞詞卡", "📏 單句朗讀訓練", "📄 段落練習"])
+tabs = st.tabs(["🎴 生詞詞卡", "📏 單句朗讀", "📄 段落練習"])
 
 # --- Tab 1: 生詞詞卡 (動態提取) ---
 with tabs[0]:
@@ -171,7 +171,7 @@ with tabs[0]:
 
 # --- Tab 2: 單句朗讀訓練 (順序：原文 -> 翻譯框 -> 按鈕 -> 功能列) ---
 with tabs[1]:
-    st.subheader("單句朗讀訓練")
+    st.subheader("單句朗讀")
     sents = re.findall(r'（(.*?)）', current_data["raw_text"], re.DOTALL)
     for i, s in enumerate(sents):
         s = s.strip()
