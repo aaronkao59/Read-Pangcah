@@ -11,6 +11,47 @@ st.set_page_config(page_title="菁英朗讀訓練", layout="wide", initial_sideb
 
 st.markdown("""
 <style>
+/* 設定 App 全域背景底色 */
+    .stApp {
+        background-color: #ebf6f7 !important;
+    }
+
+    /* 調整主標題樣式，確保在淺藍底色上依然亮眼 */
+    h1 {
+        color: #43A047 !important;
+        font-size: 3rem !important;
+        font-weight: 800 !important;
+        text-align: center;
+        padding: 20px 0px;
+    }
+
+    /* 詞卡：為了跟底色區隔，建議詞卡使用純白色背景並加強陰影 */
+    .word-card {
+        border: 2px solid #4CAF50;
+        border-radius: 15px;
+        padding: 30px 10px;
+        text-align: center;
+        background-color: #ffffff !important; /* 強制白色，讓它從背景浮現出來 */
+        color: #1a1a1a; /* 確保文字是深色的 */
+        box-shadow: 0 8px 16px rgba(0,0,0,0.05); /* 柔和的陰影 */
+        margin-bottom: 20px;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 中文翻譯框：稍微加深一點綠色透明度，增加對比 */
+    .cn-text-box {
+        color: #1b5e20;
+        background-color: rgba(76, 175, 80, 0.1); 
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 5px solid #4CAF50;
+        margin: 10px 0;
+        line-height: 1.6;
+    }
 
   /*  st.title("菁英朗讀訓練") 的字型大小與樣式設定 */
     h1 {
