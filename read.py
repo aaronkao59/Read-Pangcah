@@ -11,24 +11,31 @@ st.set_page_config(page_title="菁英朗讀訓練", layout="wide", initial_sideb
 
 st.markdown("""
 <style>
-/* 1. 設定主頁面底色 (Main Area) */
+/* 1. 設定 App 最底層的背景顏色 */
     .stApp {
-        background-color: #F9FBF9; /* 極淺的薄荷白，看起來比純白更高級、更護眼 */
+        background-color: #fddea5 !important;
     }
 
-    /* 2. 設定側邊欄底色 (Sidebar) */
-    [data-testid="stSidebar"] {
-        background-color: #E8F5E9; /* 稍微深一點的淺綠，增加視覺層次感 */
+    /* 2. 因為背景變成了淺色，我們必須強制鎖定主文字顏色為深色 */
+    /* 避免使用者在深色模式下看到白字而無法閱讀 */
+    .stApp, .stMarkdown, p, h1, h2, h3, span {
+        color: #4E342E !important; /* 深咖啡色，與粉橘黃底色非常契合 */
     }
 
-    /* 3. 針對深色模式的自動適應 (選用) */
-    @media (prefers-color-scheme: dark) {
-        .stApp {
-            background-color: #121212; /* 深色模式下回歸深色，保護眼睛 */
-        }
-        [data-testid="stSidebar"] {
-            background-color: #1B2E1B; /* 深色模式下的深綠側邊欄 */
-        }
+    /* 3. 調整 Tab 標籤的背景，使其透明，融入底色 */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+    }
+    
+    /* 4. 針對「生詞詞卡」的背景進行微調，使其稍微亮一點以產生層次感 */
+    .word-card {
+        background-color: rgba(255, 255, 255, 0.5) !important; /* 半透明白 */
+        border: 2px solid #43A047 !important;
+    }
+
+    /* 5. 確保單句練習的提示框背景不要太深 */
+    .stInfo {
+        background-color: rgba(255, 255, 255, 0.3) !important;
     }
 
   /*  st.title("菁英朗讀訓練") 的字型大小與樣式設定 */
