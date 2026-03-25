@@ -7,7 +7,7 @@ import os
 
 # --- 1. 頁面配置與自適應 CSS ---
 # 將分頁標題設定為「菁英朗讀訓練機」
-st.set_page_config(page_title="菁英朗讀訓練機", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="菁英朗讀訓練", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
