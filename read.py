@@ -13,9 +13,9 @@ st.markdown("""
 <style>
   /*  st.title("菁英朗讀訓練") 的字型大小與樣式設定 */
     h1 {
-        font-size: 2rem !important; /* 你可以調整這個數值，rem 是相對單位，32px 約為 2rem */
+        font-size: 3rem !important; /* 你可以調整這個數值，rem 是相對單位，32px 約為 2rem */
         font-weight: 800 !important;
-        color: #2E7D32; /* 你也可以指定顏色 */
+        color: #43A047; /* 你也可以指定顏色 */
         text-align: center; /* 讓標題置中，手機看會更美觀 */
         padding-bottom: 20px;
     }
