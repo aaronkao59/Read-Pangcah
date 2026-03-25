@@ -134,7 +134,7 @@ current_data = ARTICLES[selected_title]
 word_list = st.session_state.dynamic_vocab
 
 # --- 6. App 主頁面 ---
-st.title("菁英朗讀訓練機") # App 內顯主標題
+st.markdown('<h1 style="font-size: 45px; text-align: center;">菁英朗讀訓練機</h1>', unsafe_allow_html=True) # App 內顯主標題
 
 tabs = st.tabs(["🎴 生詞詞卡", "📏 單句朗讀訓練", "📄 段落練習"])
 
