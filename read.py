@@ -6,10 +6,12 @@ import io
 import os
 
 # --- 1. 頁面配置與自適應 CSS ---
-st.set_page_config(page_title="朗讀訓練機", layout="wide", initial_sidebar_state="expanded")
+# 將分頁標題設定為「菁英朗讀訓練機」
+st.set_page_config(page_title="菁英朗讀訓練機", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
+    /* 詞卡：自適應深淺色模式變數 */
     .word-card {
         border: 2px solid #4CAF50;
         border-radius: 15px;
@@ -25,12 +27,16 @@ st.markdown("""
         align-items: center;
         justify-content: center;
     }
+    
+    /* 按鈕樣式優化 */
     .stButton > button {
         width: 100%;
         padding: 0.5rem 0.2rem !important;
         font-size: 0.9rem !important;
         border-radius: 8px;
     }
+
+    /* 中文翻譯框：使用透明度綠色確保全模式清晰 */
     .cn-text-box {
         color: var(--text-color);
         background-color: rgba(76, 175, 80, 0.15); 
@@ -41,12 +47,13 @@ st.markdown("""
         line-height: 1.6;
         font-size: 0.95rem;
     }
+    
     [data-testid="column"] { padding: 0 2px !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 2. 全域主字典 (存放所有文章可能出現的生詞) ---
-# 這樣可以避免 NameError，且所有文章共用這個翻譯庫
+# --- 2. 全域生詞主字典 (MASTER_DICT) ---
+# 所有的文章生詞翻譯都集中在這裡，方便統一管理
 MASTER_DICT = {
     "Mahakakerem": "傍晚/天快黑時", "matengil": "聽見/聽到", "tanikay": "蟬", "satapang": "開始", 
     "afesa’": "響亮/嘶鳴", "makaleng": "清亮/嘹亮", "matenes": "很久", "mafana’ay": "會/明白", 
@@ -69,7 +76,7 @@ MASTER_DICT = {
     "mitiliday": "學生/讀書的人", "talapitilidan": "學校", "satapangan": "開始/起頭"
 }
 
-# --- 3. 五篇文章數據庫 ---
+# --- 3. 文章數據庫 (ARTICLES) ---
 ARTICLES = {
     "Dadaya no niyaro’": {
         "raw_text": """（Mahakakerem ko romi’ad, matengil to ko soni no tanikay,）（ satapang saho sa afesa’ sa makaleng ko soni, ）（matenes to mato mafana’ay a misalof to soni,safangcal sato a matengil. ）（Yo madodem to ko kakarayan masadak to ko fo’is,）（ mato sonol sanay to ko soni, sa fangcal sato a tengilen.）\n\n（O malingaday a maemin, sadak saho ko cidal lomowad to talakatayalan, ）（tangasa sa micelem ko cidal ta minokay a pahanhan, ）（deng to no romi’ad sa, mi’orongto to pitaw malalitemoh i rihi’ no facal sedi sa matatawa a malalicay,）（ masasipalemed, ko nanay makadofah ko kinaira toni a mihecaan ato pali’ayaw to saki no dafak a tatayalen. ）（Tada masinanotay, damsayay, fangcalay a niyaro’ koni.）\n\n（Masadak to ko folad, seriw seriw sa ko fali,）（ nengneng han ko lawac no lalan macelak to ko hana. ）（Mato maemin masafaeloh masanek ko fali nona pala, seriw seriw sa nai rengorengosan. ）（Tengil han to ko soni no tanikay ngalengalef saan mato pasenengay, ）（masinanot mato pahinoker sanay to tona palapalaan a masoni.）\n\n（Sacikacikay sa i pawalian to panay a malawla ko wawa, ）（o mato’asay sa maro’ i falaw mahaholol, pakimad. ）（O fafahiyan sa i, mitapid to macicihay a riko’, roma i, miparpar to pinawali a padaka. ）（Talacowa caay ka samaan ko ’orip i niyaro’,）（ nika nengneng han ko tamdaw maemin lipahak lihaday makadofah ko ’orip.）\n\n（Mato caho katenes ko ’aro, kafahalan sa o tenok to no lafii, ）（tengil han cecacecay to ko soni, lahedaw sato ko soni no tanikay, ）（o folad mamicelem to, polong no hekal maemin to awa to ko ades’es no soni. ）（talalemed to ko tamdamdaw a mafoti’, patedi han no folad ko widawidan no panay,）（ seriw seriw han no fali sa matiya sa o tapelik no riyar a manengneng.）\n\n（Caho ka taengad ko romi’ad, mi’orong to to sakatayal mililis to rihi’ no omah ko malingaday, ）（misatapang to malingad a matayal. ）（Caho caho katenes conihal to ko wali masadak to ko matiyaay o lamal a cidal patedi to hekal, ）（sa maliemi sato ko o’ol i rengorengosan ato i papah no kilang a manengneng. ）（Satapang to rarawraw ko tamdaw no niyaro’, ）（o mitiliday sa matatawatawa to i lalan talapitilidan,）（ o satapangan to no niyaro’ koni a romi’ad.）""",
@@ -84,25 +91,23 @@ ARTICLES = {
             "雖然部落生活簡單，", "但看每個人都過得快樂安詳、生活充實。",
             "坐沒多久，突然到了深夜，", "聽見聲音一個個消失，蟬鳴聲不見了，", "月亮要下山了，全世界靜悄悄。",
             "人們進入夢鄉，月光照在稻穗上，", "微風吹過像海浪波動。",
-            "天還沒亮，農夫扛著工具沿著田邊出發工作，開始工作。", "沒多久東方變亮，火紅的太陽照耀大地，", "草地與樹葉上的露珠閃閃發亮。", "部落的人開始喧鬧，", "學生說笑走在路上上學，這是部落一天的開始。"
+            "天還沒亮，農夫扛著工具沿著田邊出發工作。沒多久太陽出來，草地露珠閃亮。部落開始喧鬧，學生走在路上，這是部落一天的開始。"
         ]
     },
-    "文章二：Miadongay": {"raw_text": "（內容預留...）", "sent_trans": []},
-    "文章三：O nika'orip": {"raw_text": "（內容預留...）", "sent_trans": []},
-    "文章四：O tamdaw": {"raw_text": "（內容預留...）", "sent_trans": []},
-    "文章五：Sakalafi": {"raw_text": "（內容預留...）", "sent_trans": []}
+    "文章二：名稱預留": {"raw_text": "（內容預留...）", "sent_trans": []},
+    "文章三：名稱預留": {"raw_text": "（內容預留...）", "sent_trans": []},
+    "文章四：名稱預留": {"raw_text": "（內容預留...）", "sent_trans": []},
+    "文章五：名稱預留": {"raw_text": "（內容預留...）", "sent_trans": []}
 }
 
-# --- 4. 功能函數 ---
+# --- 4. 核心邏輯函數 ---
 def count_syllables(word):
-    # 計算母音數量作為音節參考
     return len(re.findall(r'[aeiouAEIOU]', word))
 
 def extract_dynamic_vocab(text):
-    # 移除括號並提取所有單字
     clean_text = re.sub(r'[（）]', '', text)
     words = re.findall(r"\b\w+’?\b", clean_text)
-    # 篩選 3 音節以上且存在於 MASTER_DICT 的單字
+    # 篩選條件：3音節以上 且 存在於主字典中
     vocab = [w for w in set(words) if count_syllables(w) >= 3 and w in MASTER_DICT]
     return sorted(vocab)
 
@@ -114,31 +119,32 @@ def speak(text):
         return fp
     except: return None
 
-# --- 5. 側邊欄切換邏輯 ---
-st.sidebar.title("📚 文章選擇")
+# --- 5. 側邊欄文章選擇 ---
+st.sidebar.title("📚 文章選讀")
 selected_title = st.sidebar.selectbox("請選擇練習文章：", list(ARTICLES.keys()))
 
-# 當文章切換時，重新提取生詞表
+# 切換文章時重置生詞與狀態
 if 'current_article' not in st.session_state or st.session_state.current_article != selected_title:
     st.session_state.current_article = selected_title
     st.session_state.dynamic_vocab = extract_dynamic_vocab(ARTICLES[selected_title]["raw_text"])
     st.session_state.w_idx = 0
     st.session_state.w_flip = False
 
-# 載入當前數據
 current_data = ARTICLES[selected_title]
 word_list = st.session_state.dynamic_vocab
 
-# --- 6. App 介面 ---
-st.title(f"🎙️ {selected_title}")
+# --- 6. App 主頁面 ---
+st.title("菁英朗讀訓練機") # App 內顯主標題
+
 tabs = st.tabs(["🎴 生詞詞卡", "📏 單句朗讀訓練", "📄 段落練習"])
 
-# --- Tab 1: 生詞詞卡 (動態更新) ---
+# --- Tab 1: 生詞詞卡 (動態提取) ---
 with tabs[0]:
     if not word_list:
-        st.warning("本篇文章中未偵測到符合 3 音節以上且已定義翻譯的生詞。")
+        st.warning("本篇文章中目前未偵測到 3 音節以上且已定義翻譯的生詞。")
     else:
         curr_w = word_list[st.session_state.w_idx]
+        # 翻轉邏輯：顯示字典內的中文翻譯 或 原文
         display = MASTER_DICT[curr_w] if st.session_state.w_flip else curr_w
         
         st.markdown(f'<div class="word-card"><h2>{display}</h2><p style="color:gray;">{st.session_state.w_idx+1}/{len(word_list)}</p></div>', unsafe_allow_html=True)
@@ -163,23 +169,28 @@ with tabs[0]:
             st.session_state.w_flip = not st.session_state.w_flip
             st.rerun()
 
-# --- Tab 2: 單句朗讀訓練 ---
+# --- Tab 2: 單句朗讀訓練 (順序：原文 -> 翻譯框 -> 按鈕 -> 功能列) ---
 with tabs[1]:
     st.subheader("單句朗讀訓練")
     sents = re.findall(r'（(.*?)）', current_data["raw_text"], re.DOTALL)
     for i, s in enumerate(sents):
         s = s.strip()
         with st.container():
+            # 1. 阿美語原文
             st.info(s)
             
-            if st.session_state.get(f"s_cn_{selected_title}_{i}", False):
+            # 2. 中文翻譯框 (展開時顯示)
+            show_key = f"s_cn_{selected_title}_{i}"
+            if st.session_state.get(show_key, False):
                 trans = current_data["sent_trans"][i] if i < len(current_data["sent_trans"]) else "（翻譯內容更新中）"
                 st.markdown(f'<div class="cn-text-box">{trans}</div>', unsafe_allow_html=True)
             
+            # 3. 顯示中文按鈕 (位於中文翻譯框下方)
             if st.button("顯示/隱藏中文翻譯", key=f"btn_s_{selected_title}_{i}"):
-                st.session_state[f"s_cn_{selected_title}_{i}"] = not st.session_state.get(f"s_cn_{selected_title}_{i}", False)
+                st.session_state[show_key] = not st.session_state.get(show_key, False)
                 st.rerun()
                 
+            # 4. 播放與評分列
             c1, c2 = st.columns([1, 2])
             if c1.button("🔊 播放句子", key=f"play_s_{selected_title}_{i}"):
                 audio = speak(s)
