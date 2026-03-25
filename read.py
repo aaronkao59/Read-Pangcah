@@ -11,6 +11,15 @@ st.set_page_config(page_title="菁英朗讀訓練", layout="wide", initial_sideb
 
 st.markdown("""
 <style>
+  /*  st.title("菁英朗讀訓練") 的字型大小與樣式設定 */
+    h1 {
+        font-size: 2rem !important; /* 你可以調整這個數值，rem 是相對單位，32px 約為 2rem */
+        font-weight: 800 !important;
+        color: #2E7D32; /* 你也可以指定顏色 */
+        text-align: center; /* 讓標題置中，手機看會更美觀 */
+        padding-bottom: 20px;
+    }
+    
     /* 詞卡：自適應深淺色模式變數 */
     .word-card {
         border: 2px solid #4CAF50;
@@ -134,7 +143,7 @@ current_data = ARTICLES[selected_title]
 word_list = st.session_state.dynamic_vocab
 
 # --- 6. App 主頁面 ---
-st.markdown('<h1 style="font-size: 37px; text-align: center;">菁英朗讀訓練機</h1>', unsafe_allow_html=True) # App 內顯主標題
+st.title("菁英朗讀訓練") # App 內顯主標題
 
 tabs = st.tabs(["🎴 生詞詞卡", "📏 單句朗讀", "📄 段落練習"])
 
