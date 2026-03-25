@@ -11,6 +11,26 @@ st.set_page_config(page_title="菁英朗讀訓練", layout="wide", initial_sideb
 
 st.markdown("""
 <style>
+/* 1. 設定主頁面底色 (Main Area) */
+    .stApp {
+        background-color: #F9FBF9; /* 極淺的薄荷白，看起來比純白更高級、更護眼 */
+    }
+
+    /* 2. 設定側邊欄底色 (Sidebar) */
+    [data-testid="stSidebar"] {
+        background-color: #E8F5E9; /* 稍微深一點的淺綠，增加視覺層次感 */
+    }
+
+    /* 3. 針對深色模式的自動適應 (選用) */
+    @media (prefers-color-scheme: dark) {
+        .stApp {
+            background-color: #121212; /* 深色模式下回歸深色，保護眼睛 */
+        }
+        [data-testid="stSidebar"] {
+            background-color: #1B2E1B; /* 深色模式下的深綠側邊欄 */
+        }
+    }
+
   /*  st.title("菁英朗讀訓練") 的字型大小與樣式設定 */
     h1 {
         font-size: 2.5rem !important; /* 你可以調整這個數值，rem 是相對單位，32px 約為 2rem */
