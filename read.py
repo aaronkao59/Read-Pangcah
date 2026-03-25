@@ -16,7 +16,7 @@ st.markdown("""
         font-size: 2.5rem !important; /* 你可以調整這個數值，rem 是相對單位，32px 約為 2rem */
         font-weight: 800 !important;
         color: #43A047; /* 你也可以指定顏色 */
-        text-align: center; /* 讓標題置中，手機看會更美觀 */
+        text-align: left; /* 讓標題置中，手機看會更美觀 */
         padding-bottom: 20px;
     }
     
