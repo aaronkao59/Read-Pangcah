@@ -207,9 +207,9 @@ with tabs[0]:
             st.session_state.w_flip = not st.session_state.w_flip
             st.rerun()
 
-# --- Tab 2: 單句朗讀訓練 (順序：原文 -> 翻譯框 -> 按鈕 -> 功能列) ---
+# --- Tab 2: 單句朗讀 (僅顯示修正後的區塊) ---
 with tabs[1]:
-    st.subheader("單句朗讀")
+    st.subheader("單句朗讀訓練")
     sents = re.findall(r'（(.*?)）', current_data["raw_text"], re.DOTALL)
     for i, s in enumerate(sents):
         s = s.strip()
@@ -217,17 +217,20 @@ with tabs[1]:
             # 1. 阿美語原文
             st.info(s)
             
-            # 2. 中文翻譯框 (展開時顯示)
+            # 2. 獲取當前句子的顯示狀態
             show_key = f"s_cn_{selected_title}_{i}"
-            if st.session_state.get(show_key, False):
+            is_showing_cn = st.session_state.get(show_key, False)
+            
+            # 3. 根據狀態顯示中文翻譯框
+            if is_showing_cn:
                 trans = current_data["sent_trans"][i] if i < len(current_data["sent_trans"]) else "（翻譯內容更新中）"
                 st.markdown(f'<div class="cn-text-box">{trans}</div>', unsafe_allow_html=True)
             
-            # 3. 顯示中文按鈕 (位於中文翻譯框下方)
-            if st.button("顯示/隱藏中文翻譯", key=f"btn_s_{selected_title}_{i}"):
-                st.session_state[show_key] = not st.session_state.get(show_key, False)
+            # --- 修正重點：動態按鈕文字 ---
+            sent_btn_label = "顯示族語" if is_showing_cn else "顯示中文"
+            if st.button(sent_btn_label, key=f"btn_s_{selected_title}_{i}"):
+                st.session_state[show_key] = not is_showing_cn
                 st.rerun()
-
                 
             # 4. 播放與評分列
             c1, c2 = st.columns([1, 2])
