@@ -189,7 +189,7 @@ with tabs[0]:
             st.session_state.w_idx = (st.session_state.w_idx - 1) % len(word_list)
             st.session_state.w_flip = False
             st.rerun()
-        if cols[1].button("🔊 發音"):
+        if cols[1].button("🔊 播放"):
             audio = speak(curr_w)
             if audio: st.audio(audio)
         if cols[2].button("➡️ 向後"):
