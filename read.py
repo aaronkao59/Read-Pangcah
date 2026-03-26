@@ -224,9 +224,11 @@ with tabs[1]:
                 st.markdown(f'<div class="cn-text-box">{trans}</div>', unsafe_allow_html=True)
             
             # 3. 顯示中文按鈕 (位於中文翻譯框下方)
-            if st.button("顯示/隱藏中文翻譯", key=f"btn_s_{selected_title}_{i}"):
-                st.session_state[show_key] = not st.session_state.get(show_key, False)
-                st.rerun()
+             # --- 核心修正：按鈕文字切換邏輯 ---
+        flip_btn_label = "🔄 顯示族語" if st.session_state.w_flip else "🔄 顯示中文"
+        if cols[4].button(flip_btn_label, key="flip_w"):
+            st.session_state.w_flip = not st.session_state.w_flip
+            st.rerun()
                 
             # 4. 播放與評分列
             c1, c2 = st.columns([1, 2])
