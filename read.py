@@ -254,3 +254,11 @@ with tabs[2]:
                 audio = speak(clean_p)
                 if audio: st.audio(audio)
             c2.radio("段落評分", ["未通過", "待加強", "通過"], key=f"chk_p_{selected_title}_{i}", horizontal=True, label_visibility="collapsed")
+
+
+# ==========================================
+# 6. 頁尾資訊 (可選)
+# ==========================================
+st.sidebar.markdown("---")
+st.sidebar.caption("© 2026 sawmAh Panay Cilangsan . All Rights Reserved.")
+st.sidebar.caption("v1.0")
