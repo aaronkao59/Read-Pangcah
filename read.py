@@ -200,7 +200,10 @@ with tabs[0]:
             random.shuffle(st.session_state.dynamic_vocab)
             st.session_state.w_idx = 0
             st.rerun()
-        if cols[4].button("🔄 翻轉/中文"):
+        
+          # --- 核心修正：按鈕文字切換邏輯 ---
+        flip_btn_label = "🔄 顯示族語" if st.session_state.w_flip else "🔄 顯示中文"
+        if cols[4].button(flip_btn_label, key="flip_w"):
             st.session_state.w_flip = not st.session_state.w_flip
             st.rerun()
 
