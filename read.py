@@ -260,5 +260,6 @@ with tabs[2]:
 # 6. 頁尾資訊 (可選)
 # ==========================================
 st.sidebar.markdown("---")
-st.sidebar.caption("© 2026 sawmAh Panay Cilangsan . All Rights Reserved.")
-st.sidebar.caption("v1.0")
+st.sidebar.caption("© 2026 sawmAh Panay Cilangsan. 
+All Rights Reserved.")
+st.sidebar.caption("v1.1(New UI Upgraded)")
